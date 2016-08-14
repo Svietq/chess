@@ -16,10 +16,9 @@ using namespace std;
 class Graphics : virtual public Console
 {
 public:
-    Graphics();
+    Graphics(){}
 
     template<typename T> void print_board(const array<array<unique_ptr<T>, 8>, 8> &iboard);
-    void print_menu();
 };
 #include "graphics_impl.h" //implementation of template function print_board()
 
