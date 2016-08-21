@@ -5,7 +5,7 @@
 
 #include "types.h"
 
-template<typename T> void Graphics::print_board(const array<array<unique_ptr<T>, 8>, 8> &iboard)
+template<typename T> void Graphics::print_board(const array<unique_ptr<T>, 64> &iboard)
 {
     //print letters
     gotoxy(0,0);
@@ -17,50 +17,53 @@ template<typename T> void Graphics::print_board(const array<array<unique_ptr<T>,
 
     //print board
     gotoxy(0,1);
-    for(const array<unique_ptr<T>, 8> &v : iboard)
+    int n=0;
+    for(auto &x : iboard)
     {
-       for(const unique_ptr<T> &x: v)
-       {
+        if(n>7)
+        {
+           n=0;
+           cout << endl;
+        }
+        n++;
 
-           cout.width(2);
-           switch(x->get_type())
-           {
-           case Piece_type::EMPTY:
-               cout << "-";
-               break;
-           case Piece_type::PAWN:
-               if(x->get_color()==Piece_color::BLACK)
-                   cout << "P";
-               else cout << "p";
-               break;
-           case Piece_type::ROOK:
-               if(x->get_color()==Piece_color::BLACK)
-                   cout << "R";
-               else cout << "r";
-               break;
-           case Piece_type::KNIGHT:
-               if(x->get_color()==Piece_color::BLACK)
-                   cout << "K";
-               else cout << "k";
-               break;
-           case Piece_type::BISHOP:
-               if(x->get_color()==Piece_color::BLACK)
-                   cout << "B";
-               else cout << "b";
-               break;
-           case Piece_type::QUEEN:
-               if(x->get_color()==Piece_color::BLACK)
-                   cout << "Q";
-               else cout << "q";
-               break;
-           case Piece_type::KING:
-               if(x->get_color()==Piece_color::BLACK)
-                   cout << "x";
-               else cout << "+";
-               break;
-           }
-       }
-       cout << endl;
+        cout.width(2);
+        switch(x->get_type())
+        {
+        case Piece_type::EMPTY:
+            cout << "-";
+            break;
+        case Piece_type::PAWN:
+            if(x->get_color()==Piece_color::BLACK)
+                cout << "P";
+            else cout << "p";
+            break;
+        case Piece_type::ROOK:
+            if(x->get_color()==Piece_color::BLACK)
+                cout << "R";
+            else cout << "r";
+            break;
+        case Piece_type::KNIGHT:
+            if(x->get_color()==Piece_color::BLACK)
+                cout << "K";
+            else cout << "k";
+            break;
+        case Piece_type::BISHOP:
+            if(x->get_color()==Piece_color::BLACK)
+                cout << "B";
+            else cout << "b";
+            break;
+        case Piece_type::QUEEN:
+            if(x->get_color()==Piece_color::BLACK)
+                cout << "Q";
+            else cout << "q";
+            break;
+        case Piece_type::KING:
+            if(x->get_color()==Piece_color::BLACK)
+                cout << "x";
+            else cout << "+";
+            break;
+        }
     }
 
     //print numbers
