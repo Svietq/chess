@@ -19,17 +19,20 @@ protected:
 public:
     Piece();
     Piece(Piece_color icolor) : _color(icolor) {_is_moved = false;}
+    Piece(Piece_coords icoords) : _coords(icoords){_is_moved = false;}
+    Piece(Piece_coords icoords, Piece_color icolor) : _coords(icoords), _color(icolor) {_is_moved = false;}
     virtual ~Piece();
 
     virtual void move(Piece_coords icoords)=0; //set new coordinates of the piece
     virtual bool is_move_correct(Piece_coords icoords)=0; //check if move can be done
     virtual Piece_type get_type()=0;
+    virtual bool is_empty()=0;
     Piece_color get_color();
-    void set_coords(Piece_coords icoords);
+    void set_coords(const Piece_coords &icoords);
     Piece_coords get_coords();
     void load_moves(const vector<Piece_coords> &imoves); //load all moves that can be made by the piece
-    vector<Piece_coords> get_moves();
-    bool get_status(); //returns _is_moved variable
+    const vector<Piece_coords> &get_moves();
+    bool get_status(); //return _is_moved variable
 
 
 };
