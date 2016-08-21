@@ -15,7 +15,7 @@ Piece_color Piece::get_color()
     return _color;
 }
 
-void Piece::set_coords(Piece_coords icoords)
+void Piece::set_coords(const Piece_coords &icoords)
 {
     _coords = icoords;
 }
@@ -30,7 +30,7 @@ void Piece::load_moves(const vector<Piece_coords> &imoves)
     _moves = imoves;
 }
 
-vector<Piece_coords> Piece::get_moves()
+const vector<Piece_coords> &Piece::get_moves()
 {
     return _moves;
 }
@@ -39,5 +39,3 @@ bool Piece::get_status()
 {
     return _is_moved;
 }
-
-
