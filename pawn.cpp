@@ -40,3 +40,8 @@ Piece_type Pawn::get_type()
 {
     return _type;
 }
+
+bool Pawn::is_empty()
+{
+    return false;
+}
