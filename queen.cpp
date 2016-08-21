@@ -35,3 +35,8 @@ Piece_type Queen::get_type()
     return _type;
 }
 
+bool Queen::is_empty()
+{
+    return false;
+}
+
