@@ -1,6 +1,5 @@
 #include "bishop.h"
 
-
 void Bishop::move(Piece_coords icoords)
 {
     if(is_move_correct(icoords))
@@ -28,4 +27,7 @@ Piece_type Bishop::get_type()
     return _type;
 }
 
-
+bool Bishop::is_empty()
+{
+    return false;
+}
