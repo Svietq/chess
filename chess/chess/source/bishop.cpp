@@ -26,8 +26,3 @@ Piece_type Bishop::get_type()
 {
     return _type;
 }
-
-bool Bishop::is_empty()
-{
-    return false;
-}

@@ -23,8 +23,3 @@ Piece_type Rook::get_type()
 {
     return _type;
 }
-
-bool Rook::is_empty()
-{
-    return false;
-}

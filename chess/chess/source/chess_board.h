@@ -12,10 +12,10 @@ class Chess_board
 public:
     Chess_board();
 
-    unique_ptr<Piece>& operator[](const Piece_coords &icoords);
-    const unique_ptr<Piece>& operator[](const Piece_coords &icoords) const;
+    Field& operator[](const Piece_coords &icoords);
+    const Field& operator[](const Piece_coords &icoords) const;
     Pieces_board::iterator begin();
     Pieces_board::iterator end();
 
-    const Pieces_board &get();
+    Pieces_board &get();
 };

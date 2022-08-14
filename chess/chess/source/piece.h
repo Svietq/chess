@@ -25,7 +25,6 @@ public:
     virtual void move(Piece_coords icoords)=0; //set new coordinates of the piece
     virtual bool is_move_correct(Piece_coords icoords)=0; //check if move can be done
     virtual Piece_type get_type()=0;
-    virtual bool is_empty()=0;
     Piece_color get_color();
     void set_coords(const Piece_coords &icoords);
     Piece_coords get_coords();

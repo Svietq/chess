@@ -19,6 +19,6 @@ public:
     Graphics(){}
 
     template<typename T> 
-    static void print_board(const array<unique_ptr<T>, 64> &iboard);
+    static void print_board(array<T, 64> &iboard);
 };
 #include "graphics_impl.h" //implementation of template function print_board()

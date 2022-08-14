@@ -4,7 +4,7 @@
 
 #include "types.h"
 
-template<typename T> void Graphics::print_board(const array<unique_ptr<T>, 64> &iboard)
+template<typename T> void Graphics::print_board(std::array<T, 64> &iboard)
 {
     //print letters
     gotoxy(0,0);
@@ -17,8 +17,9 @@ template<typename T> void Graphics::print_board(const array<unique_ptr<T>, 64> &
     //print board
     gotoxy(0,1);
     int n=0;
-    for(auto &x : iboard)
+    for(Field &x : iboard)
     {
+        
         if(n>7)
         {
            n=0;
@@ -27,6 +28,12 @@ template<typename T> void Graphics::print_board(const array<unique_ptr<T>, 64> &
         n++;
 
         cout.width(2);
+        if (x.is_empty())
+        {
+            cout << "-";
+            continue;
+        }
+
         switch(x->get_type())
         {
         case Piece_type::EMPTY:

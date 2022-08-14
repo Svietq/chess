@@ -25,9 +25,3 @@ Piece_type Knight::get_type()
 {
     return _type;
 }
-
-bool Knight::is_empty()
-{
-    return false;
-}
-

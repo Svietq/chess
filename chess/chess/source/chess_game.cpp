@@ -27,6 +27,32 @@ constexpr int COL_C = 2;
 constexpr int COL_B = 1;
 constexpr int COL_A = 0;
 
+template<Piece_color Color>
+struct Pieces 
+{
+    Rook LeftRook = Rook{Color};
+    Rook RightRook = Rook{Color};
+    Knight LeftKnight = Knight{Color};
+    Knight RightKnight = Knight{Color};
+    Bishop LeftBishop = Bishop{Color};
+    Bishop RightBishop = Bishop{Color};
+    Queen QueenPiece = Queen{Color};
+    King KingPiece = King{Color};
+
+    std::array<Pawn, 8> Pawns
+    {
+        Pawn{Color},
+        Pawn{Color},
+        Pawn{Color},
+        Pawn{Color},
+        Pawn{Color},
+        Pawn{Color},
+        Pawn{Color},
+        Pawn{Color}
+    };
+};
+
+
 void ChessGame::play()
 {
     initialize_board();
@@ -49,7 +75,7 @@ void ChessGame::play()
 
 bool ChessGame::is_1st_choice_correct()
 {
-    if(_board[_1st_choice]->is_empty())
+    if(_board[_1st_choice].is_empty())
         return false;
 
     if(_board[_1st_choice]->get_color()!=_current_color)
@@ -60,11 +86,11 @@ bool ChessGame::is_1st_choice_correct()
 
 bool ChessGame::is_2nd_choice_correct()
 {
-    if( !_board[_2nd_choice]->is_empty() && _board[_2nd_choice]->get_color()==_current_color)
+    if(!_board[_2nd_choice].is_empty() && !_board[_2nd_choice].is_empty() && _board[_2nd_choice]->get_color() == _current_color)
     {
         return false;
     }
-    else if(_board[_2nd_choice]->is_empty())
+    else if(_board[_2nd_choice].is_empty())
     {
         return true;
     }
@@ -74,50 +100,50 @@ bool ChessGame::is_2nd_choice_correct()
 
 void ChessGame::initialize_board()
 {
-    //set empty fields:
-    for(auto &x : _board)
-    {
-        x = make_unique<Empty>();
-    }
+    static Pieces<Piece_color::WHITE> WhitePieces;
+    static Pieces<Piece_color::BLACK> BlackPieces;
 
-    //set pawns:
     for(int i=0; i<8; i++)
     {
-        _board[{i,1}] = make_unique<Pawn>(Piece_color::WHITE);
-        _board[{i,6}] = make_unique<Pawn>(Piece_color::BLACK);
+        _board[{i, 1}].PiecePtr = &WhitePieces.Pawns[i];
+        _board[{i, 6}].PiecePtr = &BlackPieces.Pawns[i];
     }
 
-    //set the rest of pieces:
-    {
-    Piece_color col = Piece_color::WHITE;
-    for(int n=0; n<=7; n+=7)
-    {
-        _board[{0,n}] = make_unique<Rook>(col);
-        _board[{7,n}] = make_unique<Rook>(col);
-        _board[{1,n}] = make_unique<Knight>(col);
-        _board[{6,n}] = make_unique<Knight>(col);
-        _board[{2,n}] = make_unique<Bishop>(col);
-        _board[{5,n}] = make_unique<Bishop>(col);
-        _board[{3,n}] = make_unique<Queen>(col);
-        _board[{4,n}] = make_unique<King>(col);
+    _board[{0, 0}].PiecePtr = &WhitePieces.LeftRook;
+    _board[{7, 0}].PiecePtr = &WhitePieces.RightRook;
+    _board[{1, 0}].PiecePtr = &WhitePieces.LeftKnight;
+    _board[{6, 0}].PiecePtr = &WhitePieces.RightKnight;
+    _board[{2, 0}].PiecePtr = &WhitePieces.LeftBishop;
+    _board[{5, 0}].PiecePtr = &WhitePieces.RightBishop;
+    _board[{3, 0}].PiecePtr = &WhitePieces.QueenPiece;
+    _board[{4, 0}].PiecePtr = &WhitePieces.KingPiece;
 
-        col = Piece_color::BLACK;
-    }
-    }
+    _board[{0, 7}].PiecePtr = &BlackPieces.LeftRook;
+    _board[{7, 7}].PiecePtr = &BlackPieces.RightRook;
+    _board[{1, 7}].PiecePtr = &BlackPieces.LeftKnight;
+    _board[{6, 7}].PiecePtr = &BlackPieces.RightKnight;
+    _board[{2, 7}].PiecePtr = &BlackPieces.LeftBishop;
+    _board[{5, 7}].PiecePtr = &BlackPieces.RightBishop;
+    _board[{3, 7}].PiecePtr = &BlackPieces.QueenPiece;
+    _board[{4, 7}].PiecePtr = &BlackPieces.KingPiece;
 
-    //set coords:
+    int i = 0;
+    int j = 0;
+
+    for(Field &x : _board)
     {
-    int i=0,j=0;
-    for(auto &x : _board)
-    {
-        if(j>7)
+        if (j>7)
         {
             j=0;
             ++i;
         }
-        x->set_coords({j,i});
+
+        x.Coords = Piece_coords{j,i};
+        if (!x.is_empty())
+        {
+            x->set_coords(x.Coords);
+        }
         ++j;
-    }
     }
 }
 
@@ -140,7 +166,7 @@ void ChessGame::make_move()
     while(!is_2nd_choice_correct());
 
     //pawn promotion:
-    if(is_pawn_promotion() && _board[_2nd_choice]->is_empty())
+    if(is_pawn_promotion() && _board[_2nd_choice].is_empty())
     {
         pawn_promotion();
         swap(_board[_1st_choice], _board[_2nd_choice]);
@@ -166,18 +192,19 @@ void ChessGame::switch_fields()
     }
 
     //moving a piece to a new place
-    if(_board[_2nd_choice]->get_coords()==_board[_1st_choice]->get_coords())
+    if(_board[_2nd_choice].Coords==_board[_1st_choice]->get_coords())
     {
-        unique_ptr<Piece> temp = make_unique<Empty>();
+        Field temp;
 
-        swap(_board[_1st_choice], _board[_2nd_choice]);
-            _board[_1st_choice]->set_coords(_1st_choice);
-            _board[_2nd_choice]->set_coords(_2nd_choice);
-
-        if( !_board[_1st_choice]->is_empty())
+        std::swap(_board[_1st_choice].PiecePtr, _board[_2nd_choice].PiecePtr);
+        //_board[_1st_choice]->set_coords(_1st_choice);
+        _board[_2nd_choice]->set_coords(_2nd_choice);
+        
+        //capturing:
+        if (!_board[_1st_choice].is_empty())
         {
-            swap(temp, _board[_1st_choice]);
-                _board[_1st_choice]->set_coords(_1st_choice);
+            temp = _board[_1st_choice];
+            _board[_1st_choice].PiecePtr = nullptr;
         }        
 
         check_possible_moves();//reload moves to check if king is being attacked
@@ -189,17 +216,17 @@ void ChessGame::switch_fields()
                 _board[_1st_choice]->set_coords(_1st_choice);
                 _board[_2nd_choice]->set_coords(_2nd_choice);
 
-            if(!temp->is_empty())
+            if(!temp.is_empty())
             {
                 swap(temp, _board[_2nd_choice]);
-                    _board[_2nd_choice]->set_coords(_2nd_choice);
+                _board[_2nd_choice]->set_coords(_2nd_choice);
             }
             _is_moved = false;
 
         }
         else
         {
-            _prev_piece = temp.get();
+            _prev_piece = temp.PiecePtr;
             _is_moved = true;
         }
     }
@@ -255,14 +282,14 @@ bool ChessGame::check_vert()
     //check downwards:
     for(int i=y1+1; i<y2; i++)
     {
-        if( !_board[{x1,i}]->is_empty() && x1==x2)
+        if( !_board[{x1, i}].is_empty() && x1 == x2)
             return true;
     }
 
     //check upwards:
     for(int i=y1-1; i>y2; i--)
     {
-        if( !_board[{x1,i}]->is_empty() && x1==x2)
+        if( !_board[{x1,i}].is_empty() && x1 == x2)
             return true;
     }
 
@@ -279,14 +306,14 @@ bool ChessGame::check_hor()
     //from left to right:
     for(int i=x1+1; i<x2; i++)
     {
-        if( !_board[{i,y1}]->is_empty() && y1==y2)
+        if( !_board[{i,y1}].is_empty() && y1==y2)
             return true;
     }
 
     //from right to left:
     for(int i=x1-1; i>x2; i--)
     {
-        if( !_board[{i,y1}]->is_empty() && y1==y2)
+        if( !_board[{i,y1}].is_empty() && y1==y2)
             return true;
     }
 
@@ -305,7 +332,7 @@ bool ChessGame::check_diag()
     int j=y1+1;
     for(int i=x1+1; i<x2 && j<y2; i++,j++)
     {
-        if( !_board[{i,j}]->is_empty())
+        if( !_board[{i,j}].is_empty())
             return true;
     }
     }
@@ -315,7 +342,7 @@ bool ChessGame::check_diag()
     int j=y1-1;
     for(int i=x1-1; i>x2 && j>y2; i--,j--)
     {
-        if( !_board[{i,j}]->is_empty())
+        if( !_board[{i,j}].is_empty())
             return true;
     }
     }
@@ -325,7 +352,7 @@ bool ChessGame::check_diag()
     int j=y1+1;
     for(int i=x1-1; i>x2 && j<y2; i--,j++)
     {
-        if( !_board[{i,j}]->is_empty())
+        if( !_board[{i,j}].is_empty())
             return true;
     }
     }
@@ -335,7 +362,7 @@ bool ChessGame::check_diag()
     int j=y1-1;
     for(int i=x1+1; i<x2 && j>y2; i++,j--)
     {
-        if( !_board[{i,j}]->is_empty())
+        if( !_board[{i,j}].is_empty())
             return true;
     }
     }
@@ -352,20 +379,20 @@ bool ChessGame::is_pawn_move_correct()
 
     if(_board[_1st_choice]->get_color()==Piece_color::WHITE)
     {
-        if(y2==y1+1 && (x2==x1+1 || x2==x1-1) && _board[_2nd_choice]->is_empty() )
+        if(y2==y1+1 && (x2==x1+1 || x2==x1-1) && _board[_2nd_choice].is_empty() )
             return false;
-        else if(y2==y1+1 && x2==x1 && !_board[_2nd_choice]->is_empty() )
+        else if(y2==y1+1 && x2==x1 && !_board[_2nd_choice].is_empty())
             return false;
-        else if(y1==1 && y2==3 && x2==x1 && !_board[_2nd_choice]->is_empty() )
+        else if(y1==1 && y2==3 && x2==x1 && !_board[_2nd_choice].is_empty())
             return false;
     }
     else if(_board[_1st_choice]->get_color()==Piece_color::BLACK)
     {
-        if(y2==y1-1 && (x2==x1+1 || x2==x1-1) && _board[_2nd_choice]->is_empty() )
+        if(y2==y1-1 && (x2==x1+1 || x2==x1-1) && _board[_2nd_choice].is_empty())
             return false;
-        else if(y2==y1-1 && x2==x1 && !_board[_2nd_choice]->is_empty() )
+        else if(y2==y1-1 && x2==x1 && !_board[_2nd_choice].is_empty())
             return false;
-        else if(y1==6 && y2==4 && x2==x1 && !_board[_2nd_choice]->is_empty() )
+        else if(y1==6 && y2==4 && x2==x1 && !_board[_2nd_choice].is_empty())
             return false;
     }
 
@@ -381,11 +408,11 @@ bool ChessGame::is_castling()
 
     if(_board[_1st_choice]->get_type()==Piece_type::KING && _board[_1st_choice]->get_status()==false && x1==COL_E)
     {
-        if(y2==y1 && x2==COL_G && _board[{COL_H,y1}]->get_type()==Piece_type::ROOK && _board[{COL_F,y1}]->is_empty()
-           && _board[{COL_G,y1}]->is_empty() && _board[{COL_H,y1}]->get_status()==false)
+        if(y2==y1 && x2==COL_G && _board[{COL_H,y1}]->get_type()==Piece_type::ROOK && _board[{COL_F,y1}].is_empty()
+           && _board[{COL_G,y1}].is_empty() && _board[{COL_H,y1}]->get_status()==false)
             return true;
-        else if(y2==y1 && x2==COL_C && _board[{COL_A,y1}]->get_type()==Piece_type::ROOK && _board[{COL_B,y1}]->is_empty()
-             && _board[{COL_C,y1}]->is_empty() && _board[{COL_D,y1}]->is_empty()
+        else if(y2==y1 && x2==COL_C && _board[{COL_A,y1}]->get_type()==Piece_type::ROOK && _board[{COL_B,y1}].is_empty()
+             && _board[{COL_C,y1}].is_empty() && _board[{COL_D,y1}].is_empty()
              && _board[{COL_A,y1}]->get_status()==false)
             return true;
     }
@@ -423,9 +450,9 @@ void ChessGame::castling()
 
 void ChessGame::check_possible_moves()
 {
-    for(auto &x: _board)
+    for(Field &x: _board)
     {
-        if( !x->is_empty() )
+        if(!x.is_empty())
         {
             vector<Piece_coords> moves;
 
@@ -438,9 +465,9 @@ void ChessGame::check_possible_moves()
 
             _1st_choice = x->get_coords();
 
-            for(const auto &n : _board)
+            for (const Field &n : _board)
             {
-                _2nd_choice = n->get_coords();
+                _2nd_choice = n.Coords;
 
                 if( ( is_2nd_choice_correct() && x->is_move_correct(_2nd_choice) && is_move_correct() && !is_check() ) ||
                     ( is_castling() && !is_check() ) )
@@ -475,15 +502,15 @@ bool ChessGame::is_check()
 {
     Piece_coords kings_coords{0,0};
 
-    for(const auto &x: _board)
+    for(Field &x: _board)
     {
-        if(x->get_type()==Piece_type::KING && x->get_color()==_current_color)
+        if(!x.is_empty() && x->get_type()==Piece_type::KING && x->get_color()==_current_color)
              kings_coords = x->get_coords();
     }
 
-    for(const auto &x: _board)
+    for(Field &x: _board)
     {
-        if(x->get_color()!=_current_color)
+        if(!x.is_empty() && x->get_color()!=_current_color)
         {
             vector<Piece_coords> moves = x->get_moves();
 
@@ -504,9 +531,9 @@ bool ChessGame::has_game_ended()
     
     if(is_check())
     {
-        for(const auto &x: _board)
+        for(Field &x: _board)
         {
-            if( !x->is_empty() && x->get_color()==_current_color)
+            if( !x.is_empty() && x->get_color()==_current_color)
             {
                 vector<Piece_coords> moves = x->get_moves();
 
@@ -540,9 +567,9 @@ void ChessGame::undo_turn()
         _board[_1st_choice]->set_coords(_1st_choice);
         _board[_2nd_choice]->set_coords(_2nd_choice);
 
-    if( !_prev_piece->is_empty())
+    if( !_prev_piece)
     {
-        _prev_piece = _board[_2nd_choice].get();
+        _prev_piece = _board[_2nd_choice].PiecePtr;
 
         _board[_2nd_choice]->set_coords(_2nd_choice);
     }
@@ -554,24 +581,24 @@ void ChessGame::pawn_promotion()
     {
         switch(Control::exchange_piece())
         {
-        case Piece_type::QUEEN:
-            _board[_1st_choice] = make_unique<Queen>(_current_color);
-                _board[_1st_choice]->set_coords(_1st_choice);
-            break;
-        case Piece_type::BISHOP:
-            _board[_1st_choice] = make_unique<Bishop>(_current_color);
-                _board[_1st_choice]->set_coords(_1st_choice);
-            break;
-        case Piece_type::KNIGHT:
-            _board[_1st_choice] = make_unique<Knight>(_current_color);
-                _board[_1st_choice]->set_coords(_1st_choice);
-            break;
-        case Piece_type::ROOK:
-            _board[_1st_choice] = make_unique<Rook>(_current_color);
-                _board[_1st_choice]->set_coords(_1st_choice);
-            break;
-        default:
-            break;
+        //case Piece_type::QUEEN:
+        //    _board[_1st_choice] = make_unique<Queen>(_current_color);
+        //        _board[_1st_choice]->set_coords(_1st_choice);
+        //    break;
+        //case Piece_type::BISHOP:
+        //    _board[_1st_choice] = make_unique<Bishop>(_current_color);
+        //        _board[_1st_choice]->set_coords(_1st_choice);
+        //    break;
+        //case Piece_type::KNIGHT:
+        //    _board[_1st_choice] = make_unique<Knight>(_current_color);
+        //        _board[_1st_choice]->set_coords(_1st_choice);
+        //    break;
+        //case Piece_type::ROOK:
+        //    _board[_1st_choice] = make_unique<Rook>(_current_color);
+        //        _board[_1st_choice]->set_coords(_1st_choice);
+        //    break;
+        //default:
+        //    break;
         }
     }
 

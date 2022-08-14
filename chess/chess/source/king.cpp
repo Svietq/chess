@@ -28,9 +28,3 @@ Piece_type King::get_type()
 {
     return _type;
 }
-
-bool King::is_empty()
-{
-    return false;
-}
-
