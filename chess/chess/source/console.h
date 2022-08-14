@@ -7,7 +7,7 @@ class Console
 {
 public:
     Console();
-    void gotoxy(short ix, short iy); // set cursor in appropiate position
-    void clean_screen(int in);  // clean determined number of lines
+    static void gotoxy(short ix, short iy); // set cursor in appropiate position
+    static void clean_screen(int in);  // clean determined number of lines
 
 };

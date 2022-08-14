@@ -30,7 +30,8 @@ public:
     void set_coords(const Piece_coords &icoords);
     Piece_coords get_coords();
     void load_moves(const vector<Piece_coords> &imoves); //load all moves that can be made by the piece
-    const vector<Piece_coords> &get_moves();
+    const vector<Piece_coords> &get_moves() const;
+    bool has_moves() const;
     bool get_status(); //return _is_moved variable
 
 };

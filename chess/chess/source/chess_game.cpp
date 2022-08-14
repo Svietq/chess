@@ -1,28 +1,53 @@
 #include "chess_game.h"
 
-Chess_game::Chess_game()
+#include "piece.h"
+
+#include "pawn.h"
+#include "rook.h"
+#include "knight.h"
+#include "bishop.h"
+#include "queen.h"
+#include "king.h"
+
+#include "empty.h"
+
+#include "types.h"
+#include "graphics.h"
+#include "control.h"
+
+
+constexpr int LINE_0 = 0;
+constexpr int LINE_7 = 7;
+constexpr int COL_H = 7;
+constexpr int COL_G = 6;
+constexpr int COL_F = 5;
+constexpr int COL_E = 4;
+constexpr int COL_D = 3;
+constexpr int COL_C = 2;
+constexpr int COL_B = 1;
+constexpr int COL_A = 0;
+
+void ChessGame::play()
 {
+    initialize_board();
 
-}
-
-void Chess_game::play()
-{
-    set_pieces();
-
-    while(!is_mate())
+    while(!has_game_ended())
     {
-        print_board(_board.get());
+        Graphics::print_board(_board.get());
         check_possible_moves();
         make_move();
 
         switch_fields();
-        if(_is_moved)
+        if (_is_moved)
+        {
             switch_color();
+        }
     }
-    print_board(_board.get());
+
+    Graphics::print_board(_board.get());
 }
 
-bool Chess_game::is_1st_choice_correct()
+bool ChessGame::is_1st_choice_correct()
 {
     if(_board[_1st_choice]->is_empty())
         return false;
@@ -33,7 +58,7 @@ bool Chess_game::is_1st_choice_correct()
     return true;
 }
 
-bool Chess_game::is_2nd_choice_correct()
+bool ChessGame::is_2nd_choice_correct()
 {
     if( !_board[_2nd_choice]->is_empty() && _board[_2nd_choice]->get_color()==_current_color)
     {
@@ -47,7 +72,7 @@ bool Chess_game::is_2nd_choice_correct()
     return true;
 }
 
-void Chess_game::set_pieces()
+void ChessGame::initialize_board()
 {
     //set empty fields:
     for(auto &x : _board)
@@ -96,21 +121,21 @@ void Chess_game::set_pieces()
     }
 }
 
-void Chess_game::make_move()
+void ChessGame::make_move()
 {
     //choose first field:
     do
     {
-        _1st_choice = choose_piece();
+        _1st_choice = Control::choose_piece();
     }
-    while(!is_1st_choice_correct() || _board[_1st_choice]->get_moves().size()==0);
+    while(!is_1st_choice_correct() || !_board[_1st_choice]->has_moves());
 
     show_possible_moves();
 
     //choose second field:
     do
     {
-        _2nd_choice = choose_field();
+        _2nd_choice = Control::choose_field();
     }
     while(!is_2nd_choice_correct());
 
@@ -124,11 +149,13 @@ void Chess_game::make_move()
     }
 
     //move the piece:
-    if(is_move_correct() && !is_pawn_promotion())
+    if (is_move_correct() && !is_pawn_promotion())
+    {
         _board[_1st_choice]->move(_2nd_choice);
+    }
 }
 
-void Chess_game::switch_fields()
+void ChessGame::switch_fields()
 {
     //castling:
     if(is_castling())
@@ -172,7 +199,7 @@ void Chess_game::switch_fields()
         }
         else
         {
-            swap(_prev_piece, temp);
+            _prev_piece = temp.get();
             _is_moved = true;
         }
     }
@@ -182,19 +209,12 @@ void Chess_game::switch_fields()
     }
 }
 
-void Chess_game::switch_color()
+void ChessGame::switch_color()
 {
-    if(_current_color==Piece_color::BLACK)
-    {
-        _current_color=Piece_color::WHITE;
-    }
-    else
-    {
-        _current_color=Piece_color::BLACK;
-    }
+    _current_color = static_cast<Piece_color>(!_current_color);
 }
 
-bool Chess_game::is_move_correct()
+bool ChessGame::is_move_correct()
 {
     //check if any piece except knight is not being blocked by other piece:
     if(_board[_1st_choice]->get_type()!=Piece_type::KNIGHT)
@@ -225,7 +245,7 @@ bool Chess_game::is_move_correct()
     return true;
 }
 
-bool Chess_game::check_vert()
+bool ChessGame::check_vert()
 {
     int x1 = _1st_choice.x;
     int y1 = _1st_choice.y;
@@ -249,7 +269,7 @@ bool Chess_game::check_vert()
     return false;
 }
 
-bool Chess_game::check_hor()
+bool ChessGame::check_hor()
 {
     int x1 = _1st_choice.x;
     int y1 = _1st_choice.y;
@@ -273,7 +293,7 @@ bool Chess_game::check_hor()
     return false;
 }
 
-bool Chess_game::check_diag()
+bool ChessGame::check_diag()
 {
     int x1 = _1st_choice.x;
     int y1 = _1st_choice.y;
@@ -323,7 +343,7 @@ bool Chess_game::check_diag()
     return false;
 }
 
-bool Chess_game::is_pawn_move_correct()
+bool ChessGame::is_pawn_move_correct()
 {
     int x1 = _1st_choice.x;
     int y1 = _1st_choice.y;
@@ -352,7 +372,7 @@ bool Chess_game::is_pawn_move_correct()
     return true;
 }
 
-bool Chess_game::is_castling()
+bool ChessGame::is_castling()
 {
     int x1 = _1st_choice.x;
     int y1 = _1st_choice.y;
@@ -373,7 +393,7 @@ bool Chess_game::is_castling()
     return false;
 }
 
-void Chess_game::castling()
+void ChessGame::castling()
 {
 //    int x1 = _1st_choice.x;
     int y1 = _1st_choice.y;
@@ -401,7 +421,7 @@ void Chess_game::castling()
 
 }
 
-void Chess_game::check_possible_moves()
+void ChessGame::check_possible_moves()
 {
     for(auto &x: _board)
     {
@@ -440,18 +460,18 @@ void Chess_game::check_possible_moves()
 
 
 
-void Chess_game::show_possible_moves()
+void ChessGame::show_possible_moves()
 {
     vector<Piece_coords> v = _board[_1st_choice]->get_moves();
 
     for(Piece_coords n : v)
     {
-        gotoxy(n.x*2+1,n.y+1);
+        Console::gotoxy(n.x*2+1,n.y+1);
         cout << "O";
     }
 }
 
-bool Chess_game::is_check()
+bool ChessGame::is_check()
 {
     Piece_coords kings_coords{0,0};
 
@@ -476,10 +496,12 @@ bool Chess_game::is_check()
     return false;
 }
 
-bool Chess_game::is_mate()
+bool ChessGame::has_game_ended()
 {
     //try to move each piece of current color, if there are no possible moves then return true
 
+    //TODO: currently only checking for mate, implement other ways of finishing game:
+    
     if(is_check())
     {
         for(const auto &x: _board)
@@ -512,20 +534,21 @@ bool Chess_game::is_mate()
     return false;
 }
 
-void Chess_game::undo_turn()
+void ChessGame::undo_turn()
 {
-    swap(_board[_1st_choice], _board[_2nd_choice]);
+    std::swap(_board[_1st_choice], _board[_2nd_choice]);
         _board[_1st_choice]->set_coords(_1st_choice);
         _board[_2nd_choice]->set_coords(_2nd_choice);
 
     if( !_prev_piece->is_empty())
     {
-        swap(_prev_piece, _board[_2nd_choice]);
-            _board[_2nd_choice]->set_coords(_2nd_choice);
+        _prev_piece = _board[_2nd_choice].get();
+
+        _board[_2nd_choice]->set_coords(_2nd_choice);
     }
 }
 
-void Chess_game::pawn_promotion()
+void ChessGame::pawn_promotion()
 {
     if(is_pawn_promotion())
     {
@@ -554,7 +577,7 @@ void Chess_game::pawn_promotion()
 
 }
 
-bool Chess_game::is_pawn_promotion()
+bool ChessGame::is_pawn_promotion()
 {
     if(_board[_1st_choice]->get_type()==Piece_type::PAWN)
     {

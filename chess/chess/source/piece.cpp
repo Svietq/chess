@@ -30,9 +30,14 @@ void Piece::load_moves(const vector<Piece_coords> &imoves)
     _moves = imoves;
 }
 
-const vector<Piece_coords> &Piece::get_moves()
+const std::vector<Piece_coords>& Piece::get_moves() const
 {
     return _moves;
+}
+
+bool Piece::has_moves() const
+{
+    return get_moves().size() > 0;
 }
 
 bool Piece::get_status()

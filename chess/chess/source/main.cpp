@@ -3,6 +3,6 @@
 
 int main()
 {
-    Chess_game game;
+    ChessGame game;
     game.play();
 }
