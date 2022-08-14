@@ -5,6 +5,8 @@ Control::Control()
 
 }
 
+constexpr int IGNORED_CHARARACTERS_NUMBER = 50;
+
 Piece_coords Control::choose_piece()
 {
     gotoxy(39,1);
@@ -16,7 +18,7 @@ Piece_coords Control::choose_piece()
     while((cout << "Give field's name: " && !(cin >> s)) || s.length()!=2 || (s[0]<97 || s[0]>104) || (s[1]<49 || s[1]>56) )
     {
         cin.clear();
-        cin.ignore(numeric_limits<streamsize>::max(), '\n');
+        cin.ignore(IGNORED_CHARARACTERS_NUMBER, '\n');
         gotoxy(39,1);
         cout << "                         ";
         gotoxy(20,1);
@@ -36,7 +38,7 @@ Piece_coords Control::choose_field()
     while((cout << "Give field's name: " && !(cin >> s)) || s.length()!=2 || (s[0]<97 || s[0]>104) || (s[1]<49 || s[1]>56) )
     {
         cin.clear();
-        cin.ignore(numeric_limits<streamsize>::max(), '\n');
+        cin.ignore(IGNORED_CHARARACTERS_NUMBER, '\n');
         gotoxy(39,2);
         cout << "                         ";
         gotoxy(20,2);
@@ -56,7 +58,7 @@ Piece_type Control::exchange_piece()
     while((cout << "Choose piece (Q,B,K,R): " && !(cin >> s)) || s.length()!=1 || (s[0]!=81 && s[0]!=66 && s[0]!=75 && s[0]!=82) )
     {
         cin.clear();
-        cin.ignore(numeric_limits<streamsize>::max(), '\n');
+        cin.ignore(IGNORED_CHARARACTERS_NUMBER, '\n');
         gotoxy(44,3);
         cout << "                         ";
         gotoxy(20,3);

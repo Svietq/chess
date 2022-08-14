@@ -14,7 +14,7 @@ public:
 
     virtual Piece_type get_type();
     virtual void move(Piece_coords icoords) {}
-    virtual bool is_move_correct(Piece_coords icoords){}
+    virtual bool is_move_correct(Piece_coords icoords) { return false; }
     virtual bool is_empty();
 };
 
