@@ -1,5 +1,4 @@
-#ifndef ROOK_H
-#define ROOK_H
+#pragma once
 
 #include "piece.h"
 
@@ -17,5 +16,3 @@ public:
     virtual bool is_empty();
 
 };
-
-#endif // ROOK_H

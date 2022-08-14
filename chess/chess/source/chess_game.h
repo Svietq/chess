@@ -1,5 +1,4 @@
-#ifndef CHESS_GAME_H
-#define CHESS_GAME_H
+#pragma once
 
 #include "chess_board.h"
 #include "piece.h"
@@ -68,5 +67,3 @@ public:
     void play(); //loop which calls all functions neccessary to play the game
 
 };
-
-#endif // CHESS_GAME_H

@@ -1,5 +1,4 @@
-#ifndef GRAPHICS_IMPL_H
-#define GRAPHICS_IMPL_H
+#pragma once
 
 //implementation of the template function print_board() from the class Graphics
 
@@ -74,4 +73,3 @@ template<typename T> void Graphics::print_board(const array<unique_ptr<T>, 64> &
         cout << i << endl;
     }
 }
-#endif // GRAPHICS_IMPL_H

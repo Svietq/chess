@@ -1,5 +1,4 @@
-#ifndef QUEEN_H
-#define QUEEN_H
+#pragma once
 
 #include "piece.h"
 
@@ -17,5 +16,3 @@ public:
     virtual bool is_empty();
 
 };
-
-#endif // QUEEN_H

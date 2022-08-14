@@ -1,5 +1,4 @@
-#ifndef PIECE_H
-#define PIECE_H
+#pragma once
 
 #include "types.h"
 
@@ -34,7 +33,4 @@ public:
     const vector<Piece_coords> &get_moves();
     bool get_status(); //return _is_moved variable
 
-
 };
-
-#endif // PIECE_H

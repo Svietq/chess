@@ -1,5 +1,4 @@
-#ifndef KING_H
-#define KING_H
+#pragma once
 
 #include "piece.h"
 
@@ -16,5 +15,3 @@ public:
     virtual Piece_type get_type();
     virtual bool is_empty();
 };
-
-#endif // KING_H

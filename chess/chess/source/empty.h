@@ -1,5 +1,4 @@
-#ifndef EMPTY_H
-#define EMPTY_H
+#pragma once
 
 //subclass of class piece which represents empty field of the board
 
@@ -17,5 +16,3 @@ public:
     virtual bool is_move_correct(Piece_coords icoords) { return false; }
     virtual bool is_empty();
 };
-
-#endif // EMPTY_H

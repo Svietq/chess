@@ -1,5 +1,4 @@
-#ifndef TYPES_H
-#define TYPES_H
+#pragma once
 
 //file that holds user-defined types
 
@@ -23,7 +22,3 @@ inline bool operator==(const Piece_coords& lhs, const Piece_coords& rhs)
 
     return false;
 }
-
-
-
-#endif // TYPES_H

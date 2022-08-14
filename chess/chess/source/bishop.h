@@ -1,5 +1,4 @@
-#ifndef BISHOP_H
-#define BISHOP_H
+#pragma once
 
 #include "piece.h"
 
@@ -16,5 +15,3 @@ public:
     virtual Piece_type get_type();
     virtual bool is_empty();
 };
-
-#endif // BISHOP_H

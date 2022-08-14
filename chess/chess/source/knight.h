@@ -1,5 +1,4 @@
-#ifndef KNIGHT_H
-#define KNIGHT_H
+#pragma once
 
 #include "piece.h"
 
@@ -17,5 +16,3 @@ public:
     virtual bool is_empty();
 
 };
-
-#endif // KNIGHT_H

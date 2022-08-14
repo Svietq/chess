@@ -1,5 +1,4 @@
-#ifndef PAWN_H
-#define PAWN_H
+#pragma once
 
 #include "piece.h"
 
@@ -17,5 +16,3 @@ public:
     virtual bool is_empty();
 
 };
-
-#endif // PAWN_H

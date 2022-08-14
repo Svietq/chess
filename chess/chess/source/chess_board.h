@@ -1,5 +1,4 @@
-#ifndef CHESS_BOARD_H
-#define CHESS_BOARD_H
+#pragma once
 
 #include "types.h"
 #include "piece.h"
@@ -20,5 +19,3 @@ public:
 
     const Pieces_board &get();
 };
-
-#endif // CHESS_BOARD_H

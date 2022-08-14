@@ -1,5 +1,4 @@
-#ifndef CONSOLE_H
-#define CONSOLE_H
+#pragma once
 
 #include "windows.h"
 #include <iostream>
@@ -12,5 +11,3 @@ public:
     void clean_screen(int in);  // clean determined number of lines
 
 };
-
-#endif // CONSOLE_H

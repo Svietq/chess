@@ -1,5 +1,4 @@
-#ifndef GRAPHICS_H
-#define GRAPHICS_H
+#pragma once
 
 //graphics of the game
 
@@ -22,5 +21,3 @@ public:
     template<typename T> void print_board(const array<unique_ptr<T>, 64> &iboard);
 };
 #include "graphics_impl.h" //implementation of template function print_board()
-
-#endif // GRAPHICS_H

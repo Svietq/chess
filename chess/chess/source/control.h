@@ -1,5 +1,4 @@
-#ifndef CONTROL_H
-#define CONTROL_H
+#pragma once
 
 //controls of the game
 
@@ -21,5 +20,3 @@ public:
     Piece_type exchange_piece(); //choose piece that will be exchanged for pawn in pawn promotion
 
 };
-
-#endif // CONTROL_H
