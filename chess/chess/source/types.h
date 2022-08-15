@@ -23,7 +23,6 @@ struct Field
     bool is_empty() const { return PiecePtr == nullptr; }
 };
 
-using Pieces_board = std::array<Field, 64>;
 enum class Piece_color : bool{WHITE = false, BLACK = true };
 inline bool operator!(Piece_color InPieceColor) 
 {

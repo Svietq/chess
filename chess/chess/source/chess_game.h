@@ -15,7 +15,7 @@ private:
     void switch_fields();
     void switch_color();
 
-    class Chess_board _board;
+    class ChessBoard _board;
     struct Piece_coords _1st_choice{0,0};
     struct Piece_coords _2nd_choice{0,0};
     bool is_1st_choice_correct();
