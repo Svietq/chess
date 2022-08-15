@@ -1,14 +1,5 @@
 #include "piece.h"
 
-Piece::Piece()
-{
-    _is_moved = false;
-}
-
-Piece::~Piece()
-{
-
-}
 
 Piece_color Piece::get_color()
 {

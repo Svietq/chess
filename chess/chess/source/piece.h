@@ -8,19 +8,20 @@ using namespace std;
 
 class Piece
 {
-
-protected:
-    Piece_coords _coords; //coordinates of the piece
-    Piece_color _color; //color of the piece
-    vector<Piece_coords> _moves; //vector which holds possible moves of the piece
-    bool _is_moved = false; //variable that tells if the piece was previously moved
-
 public:
-    Piece();
-    Piece(Piece_color icolor) : _color(icolor) {_is_moved = false;}
-    Piece(Piece_coords icoords) : _coords(icoords){_is_moved = false;}
-    Piece(Piece_coords icoords, Piece_color icolor) : _coords(icoords), _color(icolor) {_is_moved = false;}
-    virtual ~Piece();
+    Piece(Piece_color icolor) : _color(icolor) {}
+    virtual ~Piece() {};
+
+    virtual void move(Piece_coords icoords) = 0;
+    virtual bool is_move_correct(Piece_coords icoords) = 0;
+
+    Piece_color get_color();
+    void set_coords(const Piece_coords &icoords);
+    Piece_coords get_coords();
+    void load_moves(const vector<Piece_coords> &imoves);
+    const vector<Piece_coords>& get_moves() const;
+    bool has_moves() const;
+    bool get_status();
 
     template <typename PieceType>
     bool IsA() 
@@ -28,14 +29,10 @@ public:
         return dynamic_cast<PieceType*>(this) != nullptr;
     }
 
-    virtual void move(Piece_coords icoords)=0; //set new coordinates of the piece
-    virtual bool is_move_correct(Piece_coords icoords)=0; //check if move can be done
-    Piece_color get_color();
-    void set_coords(const Piece_coords &icoords);
-    Piece_coords get_coords();
-    void load_moves(const vector<Piece_coords> &imoves); //load all moves that can be made by the piece
-    const vector<Piece_coords> &get_moves() const;
-    bool has_moves() const;
-    bool get_status(); //return _is_moved variable
+protected:
+    Piece_coords _coords;
+    Piece_color _color;
+    vector<Piece_coords> _moves;
+    bool _is_moved = false;
 
 };
