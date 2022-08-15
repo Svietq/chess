@@ -24,7 +24,6 @@
     <ClCompile Include="source\chess_game.cpp" />
     <ClCompile Include="source\console.cpp" />
     <ClCompile Include="source\control.cpp" />
-    <ClCompile Include="source\empty.cpp" />
     <ClCompile Include="source\king.cpp" />
     <ClCompile Include="source\knight.cpp" />
     <ClCompile Include="source\main.cpp" />
@@ -39,7 +38,6 @@
     <ClInclude Include="source\chess_game.h" />
     <ClInclude Include="source\console.h" />
     <ClInclude Include="source\control.h" />
-    <ClInclude Include="source\empty.h" />
     <ClInclude Include="source\graphics.h" />
     <ClInclude Include="source\graphics_impl.h" />
     <ClInclude Include="source\king.h" />

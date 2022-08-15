@@ -9,8 +9,6 @@
 #include "queen.h"
 #include "king.h"
 
-#include "empty.h"
-
 #include "types.h"
 #include "graphics.h"
 #include "control.h"
