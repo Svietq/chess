@@ -43,4 +43,7 @@ private:
     bool is_pawn_promotion();
     void pawn_promotion();
 
+    Field& GetField(Piece_coords InPieceCoords);
+    const Field& GetField(Piece_coords InPieceCoords) const;
+
 };
