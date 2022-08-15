@@ -35,8 +35,3 @@ bool Pawn::is_move_correct(Piece_coords icoords)
 
     return false;
 }
-
-Piece_type Pawn::get_type()
-{
-    return _type;
-}

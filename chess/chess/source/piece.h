@@ -22,9 +22,14 @@ public:
     Piece(Piece_coords icoords, Piece_color icolor) : _coords(icoords), _color(icolor) {_is_moved = false;}
     virtual ~Piece();
 
+    template <typename PieceType>
+    bool IsA() 
+    {
+        return dynamic_cast<PieceType*>(this) != nullptr;
+    }
+
     virtual void move(Piece_coords icoords)=0; //set new coordinates of the piece
     virtual bool is_move_correct(Piece_coords icoords)=0; //check if move can be done
-    virtual Piece_type get_type()=0;
     Piece_color get_color();
     void set_coords(const Piece_coords &icoords);
     Piece_coords get_coords();

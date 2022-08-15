@@ -19,7 +19,6 @@ template<typename T> void Graphics::print_board(std::array<T, 64> &iboard)
     int n=0;
     for(Field &x : iboard)
     {
-        
         if(n>7)
         {
            n=0;
@@ -34,42 +33,38 @@ template<typename T> void Graphics::print_board(std::array<T, 64> &iboard)
             continue;
         }
 
-        switch(x->get_type())
+        char pieceSymbol = 'e';
+        if (x->IsA<Pawn>())
         {
-        case Piece_type::EMPTY:
-            cout << "-";
-            break;
-        case Piece_type::PAWN:
-            if(x->get_color()==Piece_color::BLACK)
-                cout << "P";
-            else cout << "p";
-            break;
-        case Piece_type::ROOK:
-            if(x->get_color()==Piece_color::BLACK)
-                cout << "R";
-            else cout << "r";
-            break;
-        case Piece_type::KNIGHT:
-            if(x->get_color()==Piece_color::BLACK)
-                cout << "K";
-            else cout << "k";
-            break;
-        case Piece_type::BISHOP:
-            if(x->get_color()==Piece_color::BLACK)
-                cout << "B";
-            else cout << "b";
-            break;
-        case Piece_type::QUEEN:
-            if(x->get_color()==Piece_color::BLACK)
-                cout << "Q";
-            else cout << "q";
-            break;
-        case Piece_type::KING:
-            if(x->get_color()==Piece_color::BLACK)
-                cout << "x";
-            else cout << "+";
-            break;
+            pieceSymbol = 'p';
         }
+        else if (x->IsA<Rook>())
+        {
+            pieceSymbol = 'r';
+        }
+        else if (x->IsA<Knight>())
+        {
+            pieceSymbol = 'n';
+        }
+        else if (x->IsA<Bishop>())
+        {
+            pieceSymbol = 'b';
+        }
+        else if (x->IsA<Queen>())
+        {
+            pieceSymbol = 'q';
+        }
+        else if (x->IsA<King>())
+        {
+            pieceSymbol = 'k';
+        }
+
+        if (x->get_color() == Piece_color::BLACK)
+        {
+            pieceSymbol = std::toupper(pieceSymbol);
+        }
+
+        std::cout << pieceSymbol;
     }
 
     //print numbers

@@ -20,8 +20,3 @@ bool Knight::is_move_correct(Piece_coords icoords)
 
     return false;
 }
-
-Piece_type Knight::get_type()
-{
-    return _type;
-}

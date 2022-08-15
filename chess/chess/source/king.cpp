@@ -23,8 +23,3 @@ bool King::is_move_correct(Piece_coords icoords)
 
     return false;
 }
-
-Piece_type King::get_type()
-{
-    return _type;
-}

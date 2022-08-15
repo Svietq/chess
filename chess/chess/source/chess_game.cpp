@@ -242,7 +242,7 @@ void ChessGame::switch_color()
 bool ChessGame::is_move_correct()
 {
     //check if any piece except knight is not being blocked by other piece:
-    if(_board[_1st_choice]->get_type()!=Piece_type::KNIGHT)
+    if(!_board[_1st_choice]->IsA<Knight>())
     {
         if(_1st_choice.x==_2nd_choice.x || _1st_choice.y==_2nd_choice.y)
         {
@@ -259,7 +259,7 @@ bool ChessGame::is_move_correct()
         }
 
         //check movement for a pawn:
-        if(_board[_1st_choice]->get_type()==Piece_type::PAWN)
+        if(_board[_1st_choice]->IsA<Pawn>())
         {
             return is_pawn_move_correct();
         }
@@ -404,12 +404,12 @@ bool ChessGame::is_castling()
     int x2 = _2nd_choice.x;
     int y2 = _2nd_choice.y;
 
-    if(_board[_1st_choice]->get_type()==Piece_type::KING && _board[_1st_choice]->get_status()==false && x1==COL_E)
+    if(_board[_1st_choice]->IsA<King>() && _board[_1st_choice]->get_status()==false && x1==COL_E)
     {
-        if(y2==y1 && x2==COL_G && _board[{COL_H,y1}]->get_type()==Piece_type::ROOK && _board[{COL_F,y1}].is_empty()
+        if(y2==y1 && x2==COL_G && _board[{COL_H,y1}]->IsA<Rook>() && _board[{COL_F,y1}].is_empty()
            && _board[{COL_G,y1}].is_empty() && _board[{COL_H,y1}]->get_status()==false)
             return true;
-        else if(y2==y1 && x2==COL_C && _board[{COL_A,y1}]->get_type()==Piece_type::ROOK && _board[{COL_B,y1}].is_empty()
+        else if(y2==y1 && x2==COL_C && _board[{COL_A,y1}]->IsA<Rook>() && _board[{COL_B,y1}].is_empty()
              && _board[{COL_C,y1}].is_empty() && _board[{COL_D,y1}].is_empty()
              && _board[{COL_A,y1}]->get_status()==false)
             return true;
@@ -502,7 +502,7 @@ bool ChessGame::is_check()
 
     for(Field &x: _board)
     {
-        if(!x.is_empty() && x->get_type()==Piece_type::KING && x->get_color()==_current_color)
+        if(!x.is_empty() && x->IsA<King>() && x->get_color()==_current_color)
              kings_coords = x->get_coords();
     }
 
@@ -575,36 +575,36 @@ void ChessGame::undo_turn()
 
 void ChessGame::pawn_promotion()
 {
-    if(is_pawn_promotion())
-    {
-        switch(Control::exchange_piece())
-        {
-        //case Piece_type::QUEEN:
-        //    _board[_1st_choice] = make_unique<Queen>(_current_color);
-        //        _board[_1st_choice]->set_coords(_1st_choice);
-        //    break;
-        //case Piece_type::BISHOP:
-        //    _board[_1st_choice] = make_unique<Bishop>(_current_color);
-        //        _board[_1st_choice]->set_coords(_1st_choice);
-        //    break;
-        //case Piece_type::KNIGHT:
-        //    _board[_1st_choice] = make_unique<Knight>(_current_color);
-        //        _board[_1st_choice]->set_coords(_1st_choice);
-        //    break;
-        //case Piece_type::ROOK:
-        //    _board[_1st_choice] = make_unique<Rook>(_current_color);
-        //        _board[_1st_choice]->set_coords(_1st_choice);
-        //    break;
-        //default:
-        //    break;
-        }
-    }
+    //if(is_pawn_promotion())
+    //{
+    //    switch(Control::exchange_piece())
+    //    {
+    //    //case Piece_type::QUEEN:
+    //    //    _board[_1st_choice] = make_unique<Queen>(_current_color);
+    //    //        _board[_1st_choice]->set_coords(_1st_choice);
+    //    //    break;
+    //    //case Piece_type::BISHOP:
+    //    //    _board[_1st_choice] = make_unique<Bishop>(_current_color);
+    //    //        _board[_1st_choice]->set_coords(_1st_choice);
+    //    //    break;
+    //    //case Piece_type::KNIGHT:
+    //    //    _board[_1st_choice] = make_unique<Knight>(_current_color);
+    //    //        _board[_1st_choice]->set_coords(_1st_choice);
+    //    //    break;
+    //    //case Piece_type::ROOK:
+    //    //    _board[_1st_choice] = make_unique<Rook>(_current_color);
+    //    //        _board[_1st_choice]->set_coords(_1st_choice);
+    //    //    break;
+    //    //default:
+    //    //    break;
+    //    }
+    //}
 
 }
 
 bool ChessGame::is_pawn_promotion()
 {
-    if(_board[_1st_choice]->get_type()==Piece_type::PAWN)
+    if(_board[_1st_choice]->IsA<Pawn>())
     {
         if( (_board[_1st_choice]->get_color()==Piece_color::BLACK && _2nd_choice.y==LINE_0) ||
             (_board[_1st_choice]->get_color()==Piece_color::WHITE && _2nd_choice.y==LINE_7) )
